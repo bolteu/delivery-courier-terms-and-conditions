@@ -40,7 +40,7 @@
       (function () {
         var organizationName = 'bolteu';
         var repoName = 'delivery-courier-terms-and-conditions';
-        var directoryPath = window.location.pathname.replace(`/${repoName}/`, '');
+        var directoryPath = window.location.pathname.replace(`/${repoName}/`, '').replace('index.html', '');
 
         fetch(`https://api.github.com/repos/${organizationName}/${repoName}/contents/${directoryPath}`)
           .then(function(response) {
