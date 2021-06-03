@@ -1,0 +1,62 @@
+<html>
+  <head>
+    <title>Food Delivery Couriers Terms and Conditions</title>
+    <meta charSet="utf-8"/><meta http-equiv="x-ua-compatible" content="ie=edge"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no"/>
+    <style>
+      html, body {
+      }
+
+      .container {
+        padding-top: 50px;
+        padding-left: 20px;
+      }
+
+      .list {
+        list-style: none;
+      }
+
+      .list-item {
+        padding-top: 4px;
+        padding-bottom: 4px;
+      }
+
+      .list-item::before {
+        content: ">";
+        color: #34d186;
+        font-weight: bold;
+        display: inline-block; 
+        width: 1em;
+        margin-left: -1em;
+      }
+
+      .list-item-link {
+        font-weight: bolder;
+      }
+    </style>
+  </head>
+  <body>
+    <script>
+      (function () {
+        var organizationName = 'bolteu';
+        var repoName = 'delivery-courier-terms-and-conditions';
+        var directoryPath = window.location.pathname.replace(`/${repoName}/`, '');
+
+        fetch(`https://api.github.com/repos/${organizationName}/${repoName}/contents/${directoryPath}`)
+          .then(function(response) {
+            return response.json();
+          })
+          .then(function(data) {
+            var htmlString = '<ul class="list">';
+
+            htmlString += data.map(function(file) {
+              return "<li class='list-item'><a class='list-item-link' href='" + file.path + "'>" + file.name + "</a></li>"
+            }).join("");
+
+            htmlString += '</ul>';
+            document.body.innerHTML = "<div class='container'>" + htmlString + "</div>";
+          });
+      })();
+    </script>
+  <body>
+</html>
