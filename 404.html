@@ -50,7 +50,7 @@
             var htmlString = '<ul class="list">';
 
             htmlString += data.map(function(file) {
-              return "<li class='list-item'><a class='list-item-link' href='" + file.path + "'>" + file.name + "</a></li>"
+              return "<li class='list-item'><a class='list-item-link' href='" + file.name + "'>" + file.name + "</a></li>"
             }).join("");
 
             htmlString += '</ul>';
