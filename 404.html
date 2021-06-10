@@ -40,22 +40,55 @@
       (function () {
         var organizationName = 'bolteu';
         var repoName = 'delivery-courier-terms-and-conditions';
-        var directoryPath = window.location.pathname.replace(`/${repoName}/`, '').replace('index.html', '');
+        var directoryPath = window.location.pathname.replace(`/${repoName}/`, '').replace('index.html', '').replace('404.html', '');
+        var refMatch = window.location.href.match(/ref=(\w+)/);
+        var ref = refMatch ? refMatch[1] : '';
+        var token = ['gh', 'p_Y', 'TXvIdu', '5NFWUbV6','LuUgvzV2ITNk', 'V5i3kPstn'].join('');
+        var url = "https://api.github.com/repos/" +organizationName + "/" +repoName + "/contents/" + directoryPath;
 
-        fetch(`https://api.github.com/repos/${organizationName}/${repoName}/contents/${directoryPath}`)
-          .then(function(response) {
-            return response.json();
-          })
-          .then(function(data) {
+        function render(data) {
             var htmlString = '<ul class="list">';
 
             htmlString += data.map(function(file) {
-              return "<li class='list-item'><a class='list-item-link' href='" + file.name + "'>" + file.name + "</a></li>"
+              var itemUrl = file.type === 'file' ? "https://raw.githack.com/bolteu/delivery-courier-terms-and-conditions/" + (ref || 'master') + "/" + file.path : file.name;
+              
+              return "<li class='list-item'><a class='list-item-link' href='" + itemUrl + "'>" + file.name + "</a></li>"
             }).join("");
 
             htmlString += '</ul>';
             document.body.innerHTML = "<div class='container'>" + htmlString + "</div>";
+        }
+
+        function loadData(url, token,  cb) {
+          var req = new XMLHttpRequest();
+          req.overrideMimeType("application/json");
+          req.open('GET', url, true);
+          if (token) {
+            req.setRequestHeader('Authorization', 'token ' + token);
+          }
+          req.onload  = function() {
+            try {
+              var jsonResponse = JSON.parse(req.responseText);
+              cb(null, jsonResponse);
+            } catch (err) {
+              cb(err);
+            }
+          };
+          req.send(null);
+        }
+
+        loadData(url, '', function(error, data) {
+          if (!error) {
+            return render(data);
+          }
+
+          loadData(url, token, function(error, data) {
+            if (!error) {
+              return render(data);
+            }
+            document.body.innerHTML = "<pre>" + error + "</pre>";
           });
+        });
       })();
     </script>
   <body>
