@@ -38,6 +38,18 @@
   <body>
     <script>
       (function () {
+        function metaRedirect(url) {
+          var meta = document.createElement('meta');
+          meta.setAttribute('http-equiv', 'refresh');
+          meta.setAttribute('content', "0;url="+url);
+          document.head.appendChild(meta);
+        }
+
+        function getItemUrl(file) {
+          var itemUrl = file.type === 'file' ? "https://raw.githack.com/bolteu/delivery-courier-terms-and-conditions/" + (ref || 'master') + "/" + file.path : file.name;
+          return  itemUrl;
+        }
+
         var organizationName = 'bolteu';
         var repoName = 'delivery-courier-terms-and-conditions';
         var directoryPath = window.location.pathname.replace(`/${repoName}/`, '').replace('index.html', '').replace('404.html', '');
@@ -50,13 +62,17 @@
             var htmlString = '<ul class="list">';
 
             htmlString += data.map(function(file) {
-              var itemUrl = file.type === 'file' ? "https://raw.githack.com/bolteu/delivery-courier-terms-and-conditions/" + (ref || 'master') + "/" + file.path : file.name;
+              var itemUrl = getItemUrl(file);
               
               return "<li class='list-item'><a class='list-item-link' href='" + itemUrl + "'>" + file.name + "</a></li>"
             }).join("");
 
             htmlString += '</ul>';
             document.body.innerHTML = "<div class='container'>" + htmlString + "</div>";
+
+            if (data && data.length === 1) {
+              metaRedirect(getItemUrl(data[0]))
+            }
         }
 
         function loadData(url, token,  cb) {
